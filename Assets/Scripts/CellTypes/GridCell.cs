@@ -11,7 +11,7 @@ namespace SnakeGame.Grid
 
         public event EventHandler cellDestroyed;
 
-        public abstract void OnCollision(GridCell otherCell);
+        public abstract void OnCollision(SnakeCell otherCell);
 
         public virtual void DestroyCell()
         {

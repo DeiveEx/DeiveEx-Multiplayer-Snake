@@ -28,6 +28,5 @@ public class ItemManager : MonoBehaviour
         }
 
         gridManager.SetValue(itemPosition.x, itemPosition.y, Instantiate(item));
-
     }
 }

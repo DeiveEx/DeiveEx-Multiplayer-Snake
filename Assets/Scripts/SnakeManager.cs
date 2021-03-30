@@ -18,7 +18,7 @@ namespace SnakeGame
             player.gridManager = gridManager;
 
             //TODO change to use a "profile"
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
                 SnakeCell segment = Instantiate(possibleSegments[0]);
 

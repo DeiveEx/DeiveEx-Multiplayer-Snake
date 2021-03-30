@@ -6,7 +6,7 @@ namespace SnakeGame.Grid
 {
     public class WallCell : GridCell
     {
-        public override void OnCollision(GridCell otherCell)
+        public override void OnCollision(SnakeCell otherCell)
         {
             otherCell.DestroyCell();
         }

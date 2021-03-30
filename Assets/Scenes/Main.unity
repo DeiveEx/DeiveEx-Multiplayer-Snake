@@ -268,7 +268,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -360,9 +360,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showGrid: 0
-  gridSize: {x: 18, y: 10}
+  gridSize: {x: 36, y: 20}
   cellsSize: 1
-  gridOrigin: {x: -9, y: -5}
+  gridOrigin: {x: -18, y: -10}
   wallPrefab: {fileID: 6411714987114133488, guid: 61600ca58846e4f46a3379d416f3e076, type: 3}
 --- !u!114 &1690188624
 MonoBehaviour:

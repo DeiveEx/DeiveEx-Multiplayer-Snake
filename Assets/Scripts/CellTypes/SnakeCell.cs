@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace SnakeGame.Grid
     {
         public Vector2Int direction;
         public SnakeCell parentCell;
+
+        public event EventHandler<ItemInfoEventArgs> itemConsumed;
 
         private int rotationDirection;
 
@@ -29,10 +32,13 @@ namespace SnakeGame.Grid
             return destinationCell != null;
         }
 
+        public void OnItemConsumed(SnakeCell segmentToAdd)
+        {
+            itemConsumed?.Invoke(this, new ItemInfoEventArgs() { segmentToAdd = segmentToAdd });
+        }
+
         public void MoveForward(GridManager gridManager)
         {
-            Rotate(rotationDirection);
-
             Vector2Int oldPosition = gridPosition;
             Vector2Int newPosition = gridPosition + direction;
 
@@ -43,6 +49,12 @@ namespace SnakeGame.Grid
         public void SetRotationDirection(int dir)
         {
             rotationDirection = dir;
+        }
+
+        public void UpdateDirection()
+        {
+            Rotate(rotationDirection);
+            rotationDirection = 0;
         }
 
         private void Rotate(int dir)
@@ -56,9 +68,9 @@ namespace SnakeGame.Grid
             direction = new Vector2Int(Mathf.RoundToInt(transform.up.x), Mathf.RoundToInt(transform.up.y));
         }
 
-        public override void OnCollision(GridCell otherCell)
+        public override void OnCollision(SnakeCell otherCell)
         {
-            throw new System.NotImplementedException();
+            otherCell.DestroyCell();
         }
     }
 }

@@ -79,6 +79,7 @@ namespace SnakeGame
 
         private void CellDestroyedHandler(object sender, EventArgs e)
         {
+            Debug.Log($"Destroying {(sender as GridCell).name}");
             Destroy((sender as GridCell).gameObject);
         }
 

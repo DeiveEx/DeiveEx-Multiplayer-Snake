@@ -35,15 +35,22 @@ namespace SnakeGame
                 segment.direction = head.direction;
                 gridManager.SetValue(newPosition.x, newPosition.y, segment);
                 head.parentCell = segment;
-                head.cellDestroyed -= HeadDestroyedHandler;
+                head.cellDestroyed -= Head_cellDestroyed;
+                head.itemConsumed -= Head_itemConsumed;
             }
 
             bodySegments.Add(segment);
             head = segment; //The head is always the newest segment
-            head.cellDestroyed += HeadDestroyedHandler;
+            head.cellDestroyed += Head_cellDestroyed;
+            head.itemConsumed += Head_itemConsumed;
         }
 
-        private void HeadDestroyedHandler(object sender, EventArgs e)
+        private void Head_itemConsumed(object sender, ItemInfoEventArgs e)
+        {
+            AddSegment(e.segmentToAdd);
+        }
+
+        private void Head_cellDestroyed(object sender, EventArgs e)
         {
             for (int i = 0; i < bodySegments.Count; i++)
             {
@@ -76,6 +83,7 @@ namespace SnakeGame
             if (moveCounter > 1 / speed)
             {
                 moveCounter = 0;
+                head.UpdateDirection();
 
                 if (!head.CheckCollision(gridManager))
                 {

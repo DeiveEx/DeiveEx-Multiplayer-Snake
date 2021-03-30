@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace SnakeGame.Grid
 {
+    public class GridValueChangedEventArgs
+    {
+        public int x;
+        public int y;
+    }
+
     public class GenericGrid<T>
     {
-        public class GridValueChangedEventArgs
-        {
-            public int x;
-            public int y;
-        }
-
         public Vector2Int Size { get; }
         public Vector2 CellSize { get; }
         public Vector3 Origin { get; }

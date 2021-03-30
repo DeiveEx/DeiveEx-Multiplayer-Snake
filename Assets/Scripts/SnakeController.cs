@@ -8,48 +8,62 @@ namespace SnakeGame
 {
     public class SnakeController : MonoBehaviour
     {
+        public GridManager gridManager;
         [SerializeField] private float speed;
-        public string leftArrow;
-        public string rightArrow;
 
-        private GenericGrid<GridCell> grid;
+        public event EventHandler died;
+
         private List<SnakeCell> bodySegments = new List<SnakeCell>();
         private float moveCounter;
         private SnakeCell head;
+        private string leftArrow;
+        private string rightArrow;
 
-        public void SetStartingBody(Vector2Int startPosition, GenericGrid<GridCell> grid, List<SnakeCell> startBodySegments)
+        public void SetArrows(string left, string right)
         {
-            this.grid = grid;
-
-            for (int i = 0; i < startBodySegments.Count; i++)
-            {
-                SnakeCell segment = startBodySegments[i];
-                segment.gridPosition = startPosition + (segment.GetDirection() * i);
-                grid.SetValue(segment.gridPosition.x, segment.gridPosition.y, segment);
-                bodySegments.Add(segment);
-                head = segment;
-            }
+            leftArrow = left;
+            rightArrow = right;
         }
 
         public void AddSegment(SnakeCell segment)
         {
-            if (bodySegments.Count != 0)
+            //Create the new segment in front of the head
+            if (head != null)
             {
-                //TODO
+                Vector2Int newPosition = head.gridPosition + head.direction;
+                segment.gridPosition = newPosition;
+                segment.direction = head.direction;
+                gridManager.SetValue(newPosition.x, newPosition.y, segment);
+                head.parentCell = segment;
+                head.cellDestroyed -= HeadDestroyedHandler;
             }
 
             bodySegments.Add(segment);
+            head = segment; //The head is always the newest segment
+            head.cellDestroyed += HeadDestroyedHandler;
+        }
+
+        private void HeadDestroyedHandler(object sender, EventArgs e)
+        {
+            for (int i = 0; i < bodySegments.Count; i++)
+            {
+                if (bodySegments[i] != head)
+                    bodySegments[i].DestroyCell();
+            }
+
+            died?.Invoke(this, EventArgs.Empty);
+            Destroy(this.gameObject);
         }
 
         private void Update()
         {
             if (Input.GetKeyDown(leftArrow))
             {
-                head.Rotate(1);
+                head.SetRotationDirection(1);
             }
             else if (Input.GetKeyDown(rightArrow))
             {
-                head.Rotate(-1);
+                head.SetRotationDirection(-1);
             }
 
             CheckIfCanMove();
@@ -62,19 +76,26 @@ namespace SnakeGame
             if (moveCounter > 1 / speed)
             {
                 moveCounter = 0;
-                UpdateBody();
+
+                if (!head.CheckCollision(gridManager))
+                {
+                    UpdateBody();
+                }
             }
         }
 
         private void UpdateBody()
         {
-            for (int i = 0; i < bodySegments.Count; i++)
+            //Position
+            for (int i = bodySegments.Count - 1; i >= 0; i--)
             {
-                SnakeCell segment = bodySegments[i];
-                Vector2Int newPosition = segment.gridPosition + segment.GetDirection();
-                grid.SetValue(newPosition.x, newPosition.y, segment);
-                grid.SetValue(segment.gridPosition.x, segment.gridPosition.y, null);
-                segment.gridPosition = newPosition;
+                bodySegments[i].MoveForward(gridManager);
+            }
+
+            //Direction
+            for (int i = 0; i < bodySegments.Count - 1; i++)
+            {
+                bodySegments[i].direction = bodySegments[i + 1].direction;
             }
         }
     }

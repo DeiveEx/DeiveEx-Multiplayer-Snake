@@ -10,32 +10,32 @@ namespace Tests
     [TestFixture]
     public class GridTests
     {
-        GenericGrid<GridCell> grid;
+        private GenericGrid<GameObject> grid;
 
         [SetUp]
         public void Initialize()
         {
-            grid = new GenericGrid<GridCell>(100, 100, 1, 1);
+            grid = new GenericGrid<GameObject>(100, 100, 1, 1);
         }
 
         [Test]
         public void SetValue_Set0x0_IsNotNull()
         {
-            grid.SetValue(0, 0, new GridCell());
+            grid.SetValue(0, 0, new GameObject());
             Assert.IsNotNull(grid.GetValue(0, 0));
         }
 
         [Test]
         public void SetValue_Set101x101_IsNull()
         {
-            grid.SetValue(101, 101, new GridCell());
+            grid.SetValue(101, 101, new GameObject());
             Assert.IsNull(grid.GetValue(101, 101));
         }
 
         [Test]
         public void SetValue_SetMinusOneZero_IsNull()
         {
-            grid.SetValue(-1, 0, new GridCell());
+            grid.SetValue(-1, 0, new GameObject());
             Assert.IsNull(grid.GetValue(-1, 0));
         }
     }

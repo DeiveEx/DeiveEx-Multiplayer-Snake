@@ -52,7 +52,7 @@ namespace Tests
             cell.direction = Vector2Int.right;
             cell.transform.up = (Vector2)cell.direction;
             cell.SetRotationDirection(direction);
-            cell.MoveForward(gridManager);
+            cell.UpdateDirection();
             yield return null;
             Assert.AreNotEqual(Vector2Int.left, cell.direction);
         }
@@ -63,7 +63,7 @@ namespace Tests
         public IEnumerator Rotate_DirectionIsUpRotatePositive_DirectionEqualsLeft(int direction)
         {
             cell.SetRotationDirection(direction);
-            cell.MoveForward(gridManager);
+            cell.UpdateDirection();
             yield return null;
             Assert.AreEqual(Vector2Int.left, cell.direction);
         }
@@ -74,7 +74,7 @@ namespace Tests
         public IEnumerator Rotate_DirectionIsUpRotateNegative_DirectionEqualsRight(int direction)
         {
             cell.SetRotationDirection(direction);
-            cell.MoveForward(gridManager);
+            cell.UpdateDirection();
             yield return null;
             Assert.AreEqual(Vector2Int.right, cell.direction);
         }

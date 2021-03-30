@@ -12,12 +12,19 @@ namespace SnakeGame
         public SnakeManager snakeManager;
         public ItemManager itemManager;
 
+        public SnakeCell snakeCell; //TODO remove this
+
         private void Start()
         {
             gridManager.PrepareGrid();
+            snakeManager.Initialize(gridManager);
 
-            Vector2Int startPos = gridManager.GetGridSize() / 2;
-            snakeManager.CreateNewSnake(startPos, gridManager, "a", "d");
+            //TODO change to use a "profile"
+            snakeManager.CreateNewSnake("a", "d", new List<SnakeCell>() {
+                snakeCell,
+                snakeCell,
+                snakeCell
+            });
         }
 
         private void Update()

@@ -69,28 +69,6 @@ namespace SnakeGame.Grid
             return GetWorldCellPosition(x, y) + ((Vector3)CellSize / 2f);
         }
 
-        public Vector2Int GetGridPosFromWorldPos(Vector3 worldPos)
-        {
-            Vector2Int gridPos = new Vector2Int() {
-                x = Mathf.FloorToInt((worldPos - Origin).x / CellSize.x),
-                y = Mathf.FloorToInt((worldPos - Origin).y / CellSize.y)
-            };
-
-            return gridPos;
-        }
-
-        public T GetValue(Vector3 worldPos)
-        {
-            Vector2Int gridPos = GetGridPosFromWorldPos(worldPos);
-            return GetValue(gridPos.x, gridPos.y);
-        }
-
-        public void SetValue(Vector3 worldPos, T value)
-        {
-            Vector2Int gridPos = GetGridPosFromWorldPos(worldPos);
-            SetValue(gridPos.x, gridPos.y, value);
-        }
-
         public void DrawGrid()
         {
             for (int i = 0; i < Size.x; i++)

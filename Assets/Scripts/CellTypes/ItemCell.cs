@@ -7,17 +7,21 @@ namespace SnakeGame.Grid
     public class ItemInfoEventArgs : EventArgs
     {
         public SnakeCell segmentToAdd;
+        public float speedModifier;
     }
 
     public class ItemCell : GridCell
     {
-        public float slowDownValue;
         public SnakeCell segmentToAdd;
+        public float speedModifier;
 
         public override void OnCollision(SnakeCell otherCell)
         {
             DestroyCell();
-            otherCell.OnItemConsumed(Instantiate(segmentToAdd));
+            otherCell.OnItemConsumed(new ItemInfoEventArgs() {
+                segmentToAdd = Instantiate(segmentToAdd),
+                speedModifier = speedModifier
+            });
         }
     }
 }

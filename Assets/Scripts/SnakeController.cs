@@ -10,14 +10,14 @@ namespace SnakeGame
     {
         public GridManager gridManager;
         [SerializeField] private float speed;
+        public string leftArrow;
+        public string rightArrow;
 
         public event EventHandler died;
 
         private List<SnakeCell> bodySegments = new List<SnakeCell>();
         private float moveCounter;
         private SnakeCell head;
-        private string leftArrow;
-        private string rightArrow;
 
         public void SetArrows(string left, string right)
         {
@@ -40,6 +40,7 @@ namespace SnakeGame
             }
 
             bodySegments.Add(segment);
+            segment.transform.SetParent(transform);
             head = segment; //The head is always the newest segment
             head.cellDestroyed += Head_cellDestroyed;
             head.itemConsumed += Head_itemConsumed;
@@ -48,6 +49,7 @@ namespace SnakeGame
         private void Head_itemConsumed(object sender, ItemInfoEventArgs e)
         {
             AddSegment(e.segmentToAdd);
+            speed += e.speedModifier;
         }
 
         private void Head_cellDestroyed(object sender, EventArgs e)
@@ -59,7 +61,6 @@ namespace SnakeGame
             }
 
             died?.Invoke(this, EventArgs.Empty);
-            Destroy(this.gameObject);
         }
 
         private void Update()

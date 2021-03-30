@@ -8,7 +8,9 @@ namespace SnakeGame
 {
     public class GridManager : MonoBehaviour
     {
-        [SerializeField] private bool showGrid; //HACK remove later or change to editor only
+#if UNITY_EDITOR
+        [SerializeField] private bool showGrid;
+#endif
         [SerializeField] private Vector2Int gridSize;
         [SerializeField] private float cellsSize = 1;
         [SerializeField] private Vector2 gridOrigin;
@@ -47,8 +49,9 @@ namespace SnakeGame
                         j == 0 ||
                         j == gridSize.y - 1)
                     {
-
-                        SetValue(i, j, Instantiate(wallPrefab));
+                        GridCell wall = Instantiate(wallPrefab);
+                        wall.transform.SetParent(transform);
+                        SetValue(i, j, wall);
                     }
                 }
             }
@@ -59,27 +62,26 @@ namespace SnakeGame
             return grid.Size;
         }
 
-        public void SetValue(int x, int y, GridCell value)
+        public void SetValue(int x, int y, GridCell cell)
         {
             GridCell previousCell = grid.GetValue(x, y);
 
             if (previousCell != null)
             {
-                previousCell.cellDestroyed -= CellDestroyedHandler;
+                previousCell.cellDestroyed -= Cell_cellDestroyed;
             }
 
-            grid.SetValue(x, y, value);
+            grid.SetValue(x, y, cell);
 
-            if (value != null)
+            if (cell != null)
             {
-                value.gridPosition = new Vector2Int(x, y);
-                value.cellDestroyed += CellDestroyedHandler;
+                cell.gridPosition = new Vector2Int(x, y);
+                cell.cellDestroyed += Cell_cellDestroyed;
             }
         }
 
-        private void CellDestroyedHandler(object sender, EventArgs e)
+        private void Cell_cellDestroyed(object sender, EventArgs e)
         {
-            Debug.Log($"Destroying {(sender as GridCell).name}");
             Destroy((sender as GridCell).gameObject);
         }
 
@@ -88,6 +90,7 @@ namespace SnakeGame
             return grid.GetValue(x, y);
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             if (grid != null)
@@ -96,5 +99,6 @@ namespace SnakeGame
                     grid.DrawGrid();
             }
         }
+#endif
     }
 }

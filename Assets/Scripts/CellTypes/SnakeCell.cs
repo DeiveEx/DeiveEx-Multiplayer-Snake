@@ -26,15 +26,16 @@ namespace SnakeGame.Grid
 
             if (destinationCell != null)
             {
+                Debug.Log($"Collision with {destinationCell.name} on {newPosition}");
                 destinationCell.OnCollision(this);
             }
 
             return destinationCell != null;
         }
 
-        public void OnItemConsumed(SnakeCell segmentToAdd)
+        public void OnItemConsumed(ItemInfoEventArgs args)
         {
-            itemConsumed?.Invoke(this, new ItemInfoEventArgs() { segmentToAdd = segmentToAdd });
+            itemConsumed?.Invoke(this, args);
         }
 
         public void MoveForward(GridManager gridManager)

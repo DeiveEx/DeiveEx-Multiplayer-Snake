@@ -8,9 +8,10 @@ namespace SnakeGame
     public class LobbyManager : MonoBehaviour
     {
         public SnakeManager snakeManager;
+        public GameObject tutorialPanel;
         public SnakeCell snakeCell; //TODO remove this
 
-        private const string POSSIBLE_KEYS = "0123456789qwertyuiopasdfghjklzxcvbnm";
+        private const string POSSIBLE_KEYS = "0123456789abcdefghijklmnopqrstuvwxyz";
         private List<string> pressedKeys = new List<string>();
 
         public void CheckForNewPlayers()
@@ -49,6 +50,16 @@ namespace SnakeGame
             {
                 pressedKeys.Add(Input.inputString);
             }
+        }
+
+        public void ShowTutorial()
+        {
+            tutorialPanel.SetActive(true);
+        }
+
+        public void HideTutorial()
+        {
+            tutorialPanel.SetActive(false);
         }
     }
 }

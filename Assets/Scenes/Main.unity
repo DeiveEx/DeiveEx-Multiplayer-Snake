@@ -201,6 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snakeManager: {fileID: 1705013579}
+  tutorialPanel: {fileID: 455973349}
   snakeCell: {fileID: 972869353, guid: 905942f0c988987418cbb5abd6bb8791, type: 3}
 --- !u!4 &455280021
 Transform:

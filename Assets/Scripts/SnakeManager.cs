@@ -26,7 +26,7 @@ namespace SnakeGame
             player.transform.SetParent(transform);
             player.gridManager = gridManager;
 
-            Vector2Int startPosition = GetStartPosition();
+            Vector2Int startPosition = GetStartPosition(startBody.Count);
 
             for (int i = 0; i < startBody.Count; i++)
             {
@@ -52,11 +52,11 @@ namespace SnakeGame
             });
         }
 
-        private Vector2Int GetStartPosition()
+        private Vector2Int GetStartPosition(int margin)
         {
             return new Vector2Int() {
-                x = Random.Range(1, gridManager.GetGridSize().x - 1),
-                y = Random.Range(1, gridManager.GetGridSize().y - 5),
+                x = Random.Range(margin, gridManager.GetGridSize().x - margin),
+                y = Random.Range(margin, gridManager.GetGridSize().y - margin),
             };
         }
 

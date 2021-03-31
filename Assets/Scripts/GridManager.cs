@@ -20,13 +20,22 @@ namespace SnakeGame
 
         private void Awake()
         {
-            grid = new GenericGrid<GridCell>(gridSize.x, gridSize.y, cellsSize, cellsSize, gridOrigin);
-            grid.gridValueChanged += RepositionGameObject;
+            GenerateGrid(gridSize.x, gridSize.y, cellsSize, cellsSize, gridOrigin);
         }
 
         private void OnDestroy()
         {
-            grid.gridValueChanged -= RepositionGameObject;
+            if (grid != null)
+                grid.gridValueChanged -= RepositionGameObject;
+        }
+
+        public void GenerateGrid(int width, int height, float cellWidth, float cellHeight, Vector3 gridOrigin)
+        {
+            if (grid != null)
+                grid.gridValueChanged -= RepositionGameObject;
+
+            grid = new GenericGrid<GridCell>(width, height, cellWidth, cellHeight, gridOrigin);
+            grid.gridValueChanged += RepositionGameObject;
         }
 
         private void RepositionGameObject(object sender, GridValueChangedEventArgs e)
@@ -38,7 +47,7 @@ namespace SnakeGame
             }
         }
 
-        public void PrepareGrid()
+        public void GenerateWalls()
         {
             for (int i = 0; i < gridSize.x; i++)
             {

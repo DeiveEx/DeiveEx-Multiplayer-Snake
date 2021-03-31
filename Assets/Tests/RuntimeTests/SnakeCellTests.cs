@@ -22,10 +22,13 @@ namespace Tests
             obj = new GameObject();
 
             gridManager = obj.AddComponent<GridManager>();
+            gridManager.GenerateGrid(100, 100, 1, 1, Vector3.zero);
 
             cell = obj.AddComponent<SnakeCell>();
             cell.direction = Vector2Int.up;
             cell.transform.up = (Vector2)cell.direction;
+            cell.gridPosition = Vector2Int.zero;
+            gridManager.SetValue(cell.gridPosition.x, cell.gridPosition.y, cell);
         }
 
         [UnityTest]
@@ -49,6 +52,7 @@ namespace Tests
         [TestCase(100, ExpectedResult = null)]
         public IEnumerator Rotate_DirectionIsRightRotatePositive_DirectionNotEqualsLeft(int direction)
         {
+            yield return null;
             cell.direction = Vector2Int.right;
             cell.transform.up = (Vector2)cell.direction;
             cell.SetRotationDirection(direction);
@@ -62,6 +66,7 @@ namespace Tests
         [TestCase(100, ExpectedResult = null)]
         public IEnumerator Rotate_DirectionIsUpRotatePositive_DirectionEqualsLeft(int direction)
         {
+            yield return null;
             cell.SetRotationDirection(direction);
             cell.UpdateDirection();
             yield return null;
@@ -73,10 +78,31 @@ namespace Tests
         [TestCase(-100, ExpectedResult = null)]
         public IEnumerator Rotate_DirectionIsUpRotateNegative_DirectionEqualsRight(int direction)
         {
+            yield return null;
             cell.SetRotationDirection(direction);
             cell.UpdateDirection();
             yield return null;
             Assert.AreEqual(Vector2Int.right, cell.direction);
+        }
+
+        [UnityTest]
+        public IEnumerator CheckCollision_Wall1CellAboveSnakeCell_CollisionIsTrue()
+        {
+            yield return null;
+            GameObject wallObject = new GameObject();
+            WallCell wall = wallObject.AddComponent<WallCell>();
+            gridManager.SetValue(0, 1, wall);
+            Assert.IsTrue(cell.CheckCollision(gridManager));
+        }
+
+        [UnityTest]
+        public IEnumerator CheckCollision_Wall2CellsAboveSnakeCell_CollisionIsFalse()
+        {
+            yield return null;
+            GameObject wallObject = new GameObject();
+            WallCell wall = wallObject.AddComponent<WallCell>();
+            gridManager.SetValue(0, 2, wall);
+            Assert.IsFalse(cell.CheckCollision(gridManager));
         }
     }
 }

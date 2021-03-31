@@ -18,7 +18,8 @@ namespace SnakeGame
 
         private void Start()
         {
-            gridManager.PrepareGrid();
+            gridManager.GenerateWalls();
+            lobbyManager.ShowTutorial();
         }
 
         private void Update()
@@ -31,6 +32,7 @@ namespace SnakeGame
                 {
                     gameStarted = true;
                     snakeManager.StartMovingSnakes();
+                    lobbyManager.HideTutorial();
                 }
             }
             else

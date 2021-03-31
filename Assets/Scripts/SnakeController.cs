@@ -9,20 +9,27 @@ namespace SnakeGame
     public class SnakeController : MonoBehaviour
     {
         public GridManager gridManager;
-        [SerializeField] private float speed;
+        public float speed;
         public string leftArrow;
         public string rightArrow;
+        [SerializeField] private float speedModifierOnSegmentAdded = .1f;
 
         public event EventHandler died;
 
         private List<SnakeCell> bodySegments = new List<SnakeCell>();
         private float moveCounter;
         private SnakeCell head;
+        private bool canMove;
 
         public void SetArrows(string left, string right)
         {
             leftArrow = left;
             rightArrow = right;
+        }
+
+        public void StartMoving()
+        {
+            canMove = true;
         }
 
         public void AddSegment(SnakeCell segment)
@@ -41,15 +48,17 @@ namespace SnakeGame
 
             bodySegments.Add(segment);
             segment.transform.SetParent(transform);
+
             head = segment; //The head is always the newest segment
             head.cellDestroyed += Head_cellDestroyed;
             head.itemConsumed += Head_itemConsumed;
+
+            speed += speedModifierOnSegmentAdded;
         }
 
         private void Head_itemConsumed(object sender, ItemInfoEventArgs e)
         {
             AddSegment(e.segmentToAdd);
-            speed += e.speedModifier;
         }
 
         private void Head_cellDestroyed(object sender, EventArgs e)
@@ -79,6 +88,9 @@ namespace SnakeGame
 
         private void CheckIfCanMove()
         {
+            if (!canMove)
+                return;
+
             moveCounter += Time.deltaTime;
 
             if (moveCounter > 1 / speed)

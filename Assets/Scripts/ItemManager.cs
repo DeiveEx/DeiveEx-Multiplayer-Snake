@@ -27,6 +27,9 @@ public class ItemManager : MonoBehaviour
             tries++;
         }
 
-        gridManager.SetValue(itemPosition.x, itemPosition.y, Instantiate(item));
+        ItemCell itemObject = Instantiate(item);
+        itemObject.transform.SetParent(transform);
+
+        gridManager.SetValue(itemPosition.x, itemPosition.y, itemObject);
     }
 }

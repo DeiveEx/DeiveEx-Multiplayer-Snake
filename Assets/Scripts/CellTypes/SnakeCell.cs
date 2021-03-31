@@ -33,9 +33,9 @@ namespace SnakeGame.Grid
             return destinationCell != null;
         }
 
-        public void OnItemConsumed(ItemInfoEventArgs args)
+        public void OnItemConsumed(SnakeCell segmentToAdd)
         {
-            itemConsumed?.Invoke(this, args);
+            itemConsumed?.Invoke(this, new ItemInfoEventArgs() { segmentToAdd = segmentToAdd });
         }
 
         public void MoveForward(GridManager gridManager)

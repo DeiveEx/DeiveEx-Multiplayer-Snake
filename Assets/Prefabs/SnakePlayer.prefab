@@ -47,3 +47,4 @@ MonoBehaviour:
   speed: 2
   leftArrow: a
   rightArrow: d
+  speedModifierOnSegmentAdded: -0.1

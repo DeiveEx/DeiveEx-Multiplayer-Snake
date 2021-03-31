@@ -1,22 +1,24 @@
 ﻿using SnakeGame.Grid;
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SnakeGame
 {
     public class SnakeManager : MonoBehaviour
     {
-        [SerializeField] private SnakeController playerPrefab;
-
-        private Dictionary<SnakeController, List<SnakeCell>> players = new Dictionary<SnakeController, List<SnakeCell>>();
-        private GridManager gridManager;
-
-        public void Initialize(GridManager gridManager)
+        private class SnakeInfo
         {
-            this.gridManager = gridManager;
+            public SnakeController controller;
+            public List<SnakeCell> startBody;
         }
+
+        [SerializeField] private SnakeController playerPrefab;
+        [SerializeField] private GridManager gridManager;
+
+        private List<SnakeInfo> players = new List<SnakeInfo>();
+        private bool gameStarted;
 
         public void CreateNewSnake(string leftArrow, string rightArrow, List<SnakeCell> startBody)
         {
@@ -44,25 +46,40 @@ namespace SnakeGame
             player.died += Player_died;
             player.SetArrows(leftArrow, rightArrow);
 
-            players.Add(player, startBody);
+            players.Add(new SnakeInfo() {
+                controller = player,
+                startBody = startBody
+            });
         }
 
         private Vector2Int GetStartPosition()
         {
-            return gridManager.GetGridSize() / 2;
+            return new Vector2Int() {
+                x = Random.Range(1, gridManager.GetGridSize().x - 1),
+                y = Random.Range(1, gridManager.GetGridSize().y - 5),
+            };
         }
 
-        private void Player_died(object sender, EventArgs e)
+        private void Player_died(object sender, System.EventArgs e)
         {
-            SnakeController controller = (SnakeController)sender;
-            List<SnakeCell> startBody = players[controller];
-            string leftArrow = controller.leftArrow;
-            string rightArrow = controller.rightArrow;
+            SnakeController oldController = (SnakeController)sender;
+            SnakeInfo playerInfo = players.First(x => x.controller == oldController);
+            string leftArrow = oldController.leftArrow;
+            string rightArrow = oldController.rightArrow;
 
-            players.Remove(controller);
-            Destroy(controller.gameObject);
+            players.Remove(playerInfo);
+            Destroy(oldController.gameObject);
 
-            CreateNewSnake(leftArrow, rightArrow, startBody);
+            CreateNewSnake(leftArrow, rightArrow, playerInfo.startBody);
+            players[players.Count - 1].controller.StartMoving();
+        }
+
+        public void StartMovingSnakes()
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                players[i].controller.StartMoving();
+            }
         }
     }
 }

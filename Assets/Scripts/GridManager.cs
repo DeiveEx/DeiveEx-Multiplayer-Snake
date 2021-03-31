@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SnakeGame.Grid;
@@ -66,6 +65,14 @@ namespace SnakeGame
             }
         }
 
+        public Vector2Int GetRandomPosition(int margin)
+        {
+            return new Vector2Int() {
+                x = Random.Range(margin, grid.Size.x - margin),
+                y = Random.Range(margin, grid.Size.y - margin),
+            };
+        }
+
         public Vector2Int GetGridSize()
         {
             return grid.Size;
@@ -89,7 +96,7 @@ namespace SnakeGame
             }
         }
 
-        private void Cell_cellDestroyed(object sender, EventArgs e)
+        private void Cell_cellDestroyed(object sender, System.EventArgs e)
         {
             Destroy((sender as GridCell).gameObject);
         }

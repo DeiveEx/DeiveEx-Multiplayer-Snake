@@ -201,8 +201,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snakeManager: {fileID: 1705013579}
+  gridManager: {fileID: 220477663}
   tutorialPanel: {fileID: 455973349}
-  snakeCell: {fileID: 972869353, guid: 905942f0c988987418cbb5abd6bb8791, type: 3}
+  availableSnakeProfiles:
+  - {fileID: 11400000, guid: 8998242f1604f4948a9bc4b7ae70089d, type: 2}
+  - {fileID: 11400000, guid: 5da93e5c252dd1746b4b8d853d4c011d, type: 2}
 --- !u!4 &455280021
 Transform:
   m_ObjectHideFlags: 0

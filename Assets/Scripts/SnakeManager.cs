@@ -11,24 +11,21 @@ namespace SnakeGame
         private class SnakeInfo
         {
             public SnakeController controller;
-            public List<SnakeCell> startBody;
+            public SnakeCell[] startBody;
         }
 
         [SerializeField] private SnakeController playerPrefab;
         [SerializeField] private GridManager gridManager;
 
         private List<SnakeInfo> players = new List<SnakeInfo>();
-        private bool gameStarted;
 
-        public void CreateNewSnake(string leftArrow, string rightArrow, List<SnakeCell> startBody)
+        public void CreateNewSnake(string leftArrow, string rightArrow, Vector2Int startPosition, SnakeCell[] startBody)
         {
             SnakeController player = Instantiate(playerPrefab);
             player.transform.SetParent(transform);
             player.gridManager = gridManager;
 
-            Vector2Int startPosition = GetStartPosition(startBody.Count);
-
-            for (int i = 0; i < startBody.Count; i++)
+            for (int i = 0; i < startBody.Length; i++)
             {
                 SnakeCell segment = Instantiate(startBody[i]);
 
@@ -52,14 +49,6 @@ namespace SnakeGame
             });
         }
 
-        private Vector2Int GetStartPosition(int margin)
-        {
-            return new Vector2Int() {
-                x = Random.Range(margin, gridManager.GetGridSize().x - margin),
-                y = Random.Range(margin, gridManager.GetGridSize().y - margin),
-            };
-        }
-
         private void Player_died(object sender, System.EventArgs e)
         {
             SnakeController oldController = (SnakeController)sender;
@@ -67,10 +56,15 @@ namespace SnakeGame
             string leftArrow = oldController.leftArrow;
             string rightArrow = oldController.rightArrow;
 
-            players.Remove(playerInfo);
-            Destroy(oldController.gameObject);
+            DestroyPlayer(oldController);
 
-            CreateNewSnake(leftArrow, rightArrow, playerInfo.startBody);
+            CreateNewSnake(
+                leftArrow,
+                rightArrow,
+                gridManager.GetRandomPosition(playerInfo.startBody.Length),
+                playerInfo.startBody
+                );
+
             players[players.Count - 1].controller.StartMoving();
         }
 
@@ -79,6 +73,24 @@ namespace SnakeGame
             for (int i = 0; i < players.Count; i++)
             {
                 players[i].controller.StartMoving();
+            }
+        }
+
+        public SnakeController[] GetPlayers()
+        {
+            return players.Select(x => x.controller).ToArray();
+        }
+
+        public void DestroyPlayer(SnakeController player)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i].controller == player)
+                {
+                    Destroy(players[i].controller.gameObject);
+                    players.Remove(players[i]);
+                    break;
+                }
             }
         }
     }

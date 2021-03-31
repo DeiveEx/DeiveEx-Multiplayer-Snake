@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8531264844288178050}
   - component: {fileID: 3049813012389920663}
   m_Layer: 0
-  m_Name: ItemCell
+  m_Name: ItemEnginePower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,5 +109,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridPosition: {x: 0, y: 0}
-  speedModifier: -0.1
-  segmentToAdd: {fileID: 5601990207443037915, guid: 1f584081a2faaef4f8fa0a33ea794dad, type: 3}
+  segmentToAdd: {fileID: 972869353, guid: 905942f0c988987418cbb5abd6bb8791, type: 3}

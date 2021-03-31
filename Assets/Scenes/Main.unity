@@ -190,7 +190,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &455973350
 RectTransform:
   m_ObjectHideFlags: 0
@@ -209,7 +209,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 161}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &455973351
 MonoBehaviour:
@@ -497,10 +497,10 @@ RectTransform:
   m_Father: {fileID: 455973350}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 464.5, y: 0}
-  m_SizeDelta: {x: 829, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 464.5, y: -80.5}
+  m_SizeDelta: {x: 829, y: 111}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &982056518
 MonoBehaviour:
@@ -735,7 +735,7 @@ MonoBehaviour:
   gridManager: {fileID: 220477663}
   snakeManager: {fileID: 1705013579}
   itemManager: {fileID: 1082979109}
-  snakeCell: {fileID: 5601990207443037915, guid: 1f584081a2faaef4f8fa0a33ea794dad, type: 3}
+  snakeCell: {fileID: 972869353, guid: 905942f0c988987418cbb5abd6bb8791, type: 3}
 --- !u!4 &1690188622
 Transform:
   m_ObjectHideFlags: 0

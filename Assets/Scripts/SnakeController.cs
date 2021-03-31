@@ -44,6 +44,7 @@ namespace SnakeGame
                 head.parentCell = segment;
                 head.cellDestroyed -= Head_cellDestroyed;
                 head.itemConsumed -= Head_itemConsumed;
+                head.segmentAdded -= Head_segmentAdded;
             }
 
             bodySegments.Add(segment);
@@ -52,11 +53,18 @@ namespace SnakeGame
             head = segment; //The head is always the newest segment
             head.cellDestroyed += Head_cellDestroyed;
             head.itemConsumed += Head_itemConsumed;
+            head.segmentAdded += Head_segmentAdded;
+            head.SegmentAdded();
 
             speed += speedModifierOnSegmentAdded;
         }
 
-        private void Head_itemConsumed(object sender, ItemInfoEventArgs e)
+        private void Head_segmentAdded(object sender, ItemEffectEventArgs e)
+        {
+            speed += e.speedModifier;
+        }
+
+        private void Head_itemConsumed(object sender, SnakeSegmentEventArgs e)
         {
             AddSegment(e.segmentToAdd);
         }

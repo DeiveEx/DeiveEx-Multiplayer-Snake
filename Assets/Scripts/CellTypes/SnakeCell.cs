@@ -5,14 +5,25 @@ using UnityEngine;
 
 namespace SnakeGame.Grid
 {
+    public class SnakeSegmentEventArgs : EventArgs
+    {
+        public SnakeCell segmentToAdd;
+    }
+
+    public class ItemEffectEventArgs
+    {
+        public float speedModifier;
+    }
+
     public class SnakeCell : GridCell
     {
         public Vector2Int direction;
         public SnakeCell parentCell;
 
-        public event EventHandler<ItemInfoEventArgs> itemConsumed;
+        public event EventHandler<SnakeSegmentEventArgs> itemConsumed;
+        public event EventHandler<ItemEffectEventArgs> segmentAdded;
 
-        private int rotationDirection;
+        protected int rotationDirection;
 
         public SnakeCell GetParent()
         {
@@ -35,7 +46,7 @@ namespace SnakeGame.Grid
 
         public void OnItemConsumed(SnakeCell segmentToAdd)
         {
-            itemConsumed?.Invoke(this, new ItemInfoEventArgs() { segmentToAdd = segmentToAdd });
+            itemConsumed?.Invoke(this, new SnakeSegmentEventArgs() { segmentToAdd = segmentToAdd });
         }
 
         public void MoveForward(GridManager gridManager)
@@ -58,7 +69,7 @@ namespace SnakeGame.Grid
             rotationDirection = 0;
         }
 
-        private void Rotate(int dir)
+        protected void Rotate(int dir)
         {
             if (dir == 0)
                 return;
@@ -72,6 +83,16 @@ namespace SnakeGame.Grid
         public override void OnCollision(SnakeCell otherCell)
         {
             otherCell.DestroyCell();
+        }
+
+        public virtual void SegmentAdded()
+        {
+
+        }
+
+        protected void OnSegmentAdded(ItemEffectEventArgs args)
+        {
+            segmentAdded?.Invoke(this, args);
         }
     }
 }

@@ -87,7 +87,7 @@ namespace SnakeGame.Grid
 
         public virtual void SegmentAdded()
         {
-
+            OnSegmentAdded(new ItemEffectEventArgs());
         }
 
         protected void OnSegmentAdded(ItemEffectEventArgs args)

@@ -85,12 +85,12 @@ namespace SnakeGame.Grid
             otherCell.DestroyCell();
         }
 
-        public virtual void SegmentAdded()
+        public virtual void ExecuteSegmentAddedEffect()
         {
             OnSegmentAdded(new ItemEffectEventArgs());
         }
 
-        protected void OnSegmentAdded(ItemEffectEventArgs args)
+        protected virtual void OnSegmentAdded(ItemEffectEventArgs args)
         {
             segmentAdded?.Invoke(this, args);
         }

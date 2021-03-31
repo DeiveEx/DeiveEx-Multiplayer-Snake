@@ -54,7 +54,7 @@ namespace SnakeGame
             head.cellDestroyed += Head_cellDestroyed;
             head.itemConsumed += Head_itemConsumed;
             head.segmentAdded += Head_segmentAdded;
-            head.SegmentAdded();
+            head.ExecuteSegmentAddedEffect();
 
             speed += speedModifierOnSegmentAdded;
         }

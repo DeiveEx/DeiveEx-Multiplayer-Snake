@@ -9,7 +9,7 @@ namespace SnakeGame.Grid
     {
         public float speedUpValue;
 
-        public override void SegmentAdded()
+        public override void ExecuteSegmentAddedEffect()
         {
             ItemEffectEventArgs itemEffectEventArgs = new ItemEffectEventArgs() {
                 speedModifier = speedUpValue

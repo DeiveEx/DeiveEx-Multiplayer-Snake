@@ -43,6 +43,10 @@ namespace SnakeGame
             {
                 controller.died += Respawn;
             }
+            else
+            {
+                controller.died += (sender, e) => DestroyPlayer(controller);
+            }
 
             snakes.Add(new SnakeInfo() {
                 controller = controller,
@@ -54,11 +58,14 @@ namespace SnakeGame
         {
             SnakeController controller = (SnakeController)sender;
             SnakeInfo playerInfo = snakes.First(x => x.controller == controller);
+            snakes.Remove(playerInfo);
+            controller.died -= Respawn;
 
             ConfigureNewSnake(
                 controller,
                 gridManager.GetRandomPosition(playerInfo.startBody.Length + 2),
-                playerInfo.startBody
+                playerInfo.startBody,
+                true
                 );
         }
 

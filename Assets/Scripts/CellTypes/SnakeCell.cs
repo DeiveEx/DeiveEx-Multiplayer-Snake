@@ -40,7 +40,6 @@ namespace SnakeGame.Grid
 
             if (destinationCell != null)
             {
-                Debug.Log($"Collision with {destinationCell.name} on {newPosition}");
                 destinationCell.OnCollision(this);
             }
 

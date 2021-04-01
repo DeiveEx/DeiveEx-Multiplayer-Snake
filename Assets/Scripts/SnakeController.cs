@@ -84,10 +84,17 @@ namespace SnakeGame
 
         private void Head_cellDestroyed(object sender, EventArgs e)
         {
+            Die();
+        }
+
+        public void Die()
+        {
             for (int i = 0; i < bodySegments.Count; i++)
             {
                 if (bodySegments[i] != head)
+                {
                     bodySegments[i].DestroyCell();
+                }
             }
 
             bodySegments.Clear();

@@ -97,8 +97,7 @@ namespace SnakeGame
             snakeManager.ConfigureNewSnake(
                 player,
                 startPosition,
-                profile.startBody,
-                true //TODO remove this
+                profile.startBody
                 );
 
             return player;
@@ -111,6 +110,7 @@ namespace SnakeGame
             AiInput input = ai.GetComponent<AiInput>();
             input.SetPairController(pairController);
             input.itemManager = itemManager;
+            input.snakeManager = snakeManager;
 
             SnakeProfileSO selectedProfile = availableSnakeProfiles[selectedSnakeProfileID];
             Vector2Int startPosition = gridManager.GetRandomPosition(selectedProfile.startBody.Length + 2);

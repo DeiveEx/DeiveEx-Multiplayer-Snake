@@ -9,9 +9,9 @@ namespace SnakeGame.InputModes
     public class AiInput : MonoBehaviour
     {
         [HideInInspector] public ItemManager itemManager;
+        [HideInInspector] public SnakeManager snakeManager;
 
         private SnakeController controller;
-        private SnakeController pair;
         private ItemCell target;
 
         private void Awake()
@@ -50,7 +50,12 @@ namespace SnakeGame.InputModes
 
         public void SetPairController(SnakeController pair)
         {
-            this.pair = pair;
+            pair.died += Pair_died;
+        }
+
+        private void Pair_died(object sender, System.EventArgs e)
+        {
+            snakeManager.DestroyPlayer(controller);
         }
 
         public void SetTarget(ItemCell item)
@@ -61,8 +66,6 @@ namespace SnakeGame.InputModes
 
         private void Item_cellDestroyed(object sender, System.EventArgs e)
         {
-            Debug.Log("getting new item");
-
             var itens = itemManager.GetItens();
             SetTarget(itens[itens.Count - 1]);
         }

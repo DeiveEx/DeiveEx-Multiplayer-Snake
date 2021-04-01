@@ -46,9 +46,12 @@ namespace SnakeGame
 
         private void ItemObject_cellDestroyed(object sender, System.EventArgs e)
         {
-            Debug.Log("Removing");
             itens.Remove(sender as ItemCell);
-            CreateNewItem();
+
+            if (Mathf.FloorToInt(snakeManager.GetPlayerCount() / 2) > itens.Count)
+            {
+                CreateNewItem();
+            }
         }
 
         public List<ItemCell> GetItens()

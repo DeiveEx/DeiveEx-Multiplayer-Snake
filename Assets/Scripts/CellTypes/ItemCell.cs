@@ -11,6 +11,7 @@ namespace SnakeGame.Grid
 
         public override void OnCollision(SnakeCell otherCell)
         {
+            Debug.Log("Destroying");
             DestroyCell();
             otherCell.OnItemConsumed(Instantiate(segmentToAdd));
         }

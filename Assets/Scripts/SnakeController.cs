@@ -8,23 +8,33 @@ namespace SnakeGame
 {
     public class SnakeController : MonoBehaviour
     {
-        public GridManager gridManager;
-        public float speed;
-        public string leftArrow;
-        public string rightArrow;
+        [HideInInspector] public GridManager gridManager;
+        [SerializeField] private float startSpeed = 1;
+        [SerializeField] private float minSpeed = .1f;
         [SerializeField] private float speedModifierOnSegmentAdded = .1f;
 
         public event EventHandler died;
+        public event EventHandler moving;
 
         private List<SnakeCell> bodySegments = new List<SnakeCell>();
         private float moveCounter;
         private SnakeCell head;
         private bool canMove;
+        private float speed;
 
-        public void SetArrows(string left, string right)
+        private void Awake()
         {
-            leftArrow = left;
-            rightArrow = right;
+            speed = startSpeed;
+        }
+
+        private void Update()
+        {
+            CheckIfCanMove();
+        }
+
+        public void SetDirection(int dir)
+        {
+            head.SetRotationDirection(dir);
         }
 
         public void StartMoving()
@@ -37,14 +47,13 @@ namespace SnakeGame
             //Create the new segment in front of the head
             if (head != null)
             {
-                Vector2Int newPosition = head.gridPosition + head.direction;
+                Vector2Int newPosition = head.gridPosition + head.Direction;
                 segment.gridPosition = newPosition;
-                segment.direction = head.direction;
+                segment.Direction = head.Direction;
                 gridManager.SetValue(newPosition.x, newPosition.y, segment);
                 head.parentCell = segment;
                 head.cellDestroyed -= Head_cellDestroyed;
                 head.itemConsumed -= Head_itemConsumed;
-                head.segmentAdded -= Head_segmentAdded;
             }
 
             bodySegments.Add(segment);
@@ -53,15 +62,19 @@ namespace SnakeGame
             head = segment; //The head is always the newest segment
             head.cellDestroyed += Head_cellDestroyed;
             head.itemConsumed += Head_itemConsumed;
-            head.segmentAdded += Head_segmentAdded;
-            head.ExecuteSegmentAddedEffect();
 
-            speed += speedModifierOnSegmentAdded;
+            ModifySpeed(speedModifierOnSegmentAdded);
+            head.ExecuteSegmentAddedEffect(this);
         }
 
-        private void Head_segmentAdded(object sender, ItemEffectEventArgs e)
+        public void ModifySpeed(float value)
         {
-            speed += e.speedModifier;
+            speed += value;
+
+            if (speed < minSpeed)
+            {
+                speed = minSpeed;
+            }
         }
 
         private void Head_itemConsumed(object sender, SnakeSegmentEventArgs e)
@@ -77,21 +90,12 @@ namespace SnakeGame
                     bodySegments[i].DestroyCell();
             }
 
+            bodySegments.Clear();
+            speed = startSpeed;
+            moveCounter = 0;
+            head = null;
+
             died?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(leftArrow))
-            {
-                head.SetRotationDirection(1);
-            }
-            else if (Input.GetKeyDown(rightArrow))
-            {
-                head.SetRotationDirection(-1);
-            }
-
-            CheckIfCanMove();
         }
 
         private void CheckIfCanMove()
@@ -103,6 +107,7 @@ namespace SnakeGame
 
             if (moveCounter > 1 / speed)
             {
+                moving?.Invoke(this, EventArgs.Empty);
                 moveCounter = 0;
                 head.UpdateDirection();
 
@@ -124,8 +129,14 @@ namespace SnakeGame
             //Direction
             for (int i = 0; i < bodySegments.Count - 1; i++)
             {
-                bodySegments[i].direction = bodySegments[i + 1].direction;
+                bodySegments[i].Direction = bodySegments[i + 1].Direction;
+                bodySegments[i].transform.rotation = bodySegments[i + 1].transform.rotation;
             }
+        }
+
+        public SnakeCell GetHead()
+        {
+            return head;
         }
     }
 }

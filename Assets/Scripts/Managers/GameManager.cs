@@ -10,7 +10,6 @@ namespace SnakeGame
     public class GameManager : MonoBehaviour
     {
         public GridManager gridManager;
-        public ItemManager itemManager;
         public LobbyManager lobbyManager;
         public SnakeManager snakeManager;
 
@@ -27,19 +26,13 @@ namespace SnakeGame
             if (!gameStarted)
             {
                 lobbyManager.CheckForNewPlayers();
+                lobbyManager.UpdateCurrentPlayerProfile();
 
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (Input.GetKeyDown(KeyCode.Return) && snakeManager.GetPlayerCount() > 0)
                 {
                     gameStarted = true;
                     snakeManager.StartMovingSnakes();
                     lobbyManager.HideTutorial();
-                }
-            }
-            else
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    itemManager.CreateNewItem(gridManager);
                 }
             }
         }

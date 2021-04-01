@@ -1,6 +1,7 @@
 ﻿
 using SnakeGame;
 using SnakeGame.Grid;
+using SnakeGame.InputModes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +10,13 @@ namespace SnakeGame
 {
     public class ItemManager : MonoBehaviour
     {
-        public ItemCell[] possibleItens;
+        [SerializeField] private GridManager gridManager;
+        [SerializeField] private SnakeManager snakeManager;
+        [SerializeField] private ItemCell[] possibleItens;
 
-        public void CreateNewItem(GridManager gridManager)
+        private List<ItemCell> itens = new List<ItemCell>();
+
+        public ItemCell CreateNewItem()
         {
             ItemCell item = possibleItens[Random.Range(0, possibleItens.Length)];
 
@@ -31,8 +36,24 @@ namespace SnakeGame
 
             ItemCell itemObject = Instantiate(item);
             itemObject.transform.SetParent(transform);
+            itemObject.cellDestroyed += ItemObject_cellDestroyed;
 
             gridManager.SetValue(itemPosition.x, itemPosition.y, itemObject);
+            itens.Add(itemObject);
+
+            return itemObject;
+        }
+
+        private void ItemObject_cellDestroyed(object sender, System.EventArgs e)
+        {
+            Debug.Log("Removing");
+            itens.Remove(sender as ItemCell);
+            CreateNewItem();
+        }
+
+        public List<ItemCell> GetItens()
+        {
+            return itens;
         }
     }
 }

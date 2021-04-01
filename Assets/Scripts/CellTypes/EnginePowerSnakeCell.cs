@@ -9,13 +9,9 @@ namespace SnakeGame.Grid
     {
         public float speedUpValue;
 
-        public override void ExecuteSegmentAddedEffect()
+        public override void ExecuteSegmentAddedEffect(SnakeController controller)
         {
-            ItemEffectEventArgs itemEffectEventArgs = new ItemEffectEventArgs() {
-                speedModifier = speedUpValue
-            };
-
-            OnSegmentAdded(itemEffectEventArgs);
+            controller.ModifySpeed(speedUpValue);
         }
     }
 }

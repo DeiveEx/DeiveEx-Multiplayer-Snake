@@ -15,7 +15,14 @@ namespace SnakeGame.Grid
 
         public virtual void DestroyCell()
         {
-            cellDestroyed?.Invoke(this, EventArgs.Empty);
+            Debug.Log("destroy cell method");
+            OnCellDestroyed(EventArgs.Empty);
+        }
+
+        protected virtual void OnCellDestroyed(EventArgs args)
+        {
+            Debug.Log("destroy cell event");
+            cellDestroyed?.Invoke(this, args);
         }
     }
 }

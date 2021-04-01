@@ -10,19 +10,22 @@ namespace SnakeGame.Grid
         public SnakeCell segmentToAdd;
     }
 
-    public class ItemEffectEventArgs
-    {
-        public float speedModifier;
-    }
-
     public class SnakeCell : GridCell
     {
-        public Vector2Int direction;
+        public Vector2Int Direction
+        {
+            get => _direction;
+            set
+            {
+                _direction = value;
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, (Vector2)value);
+            }
+        }
         public SnakeCell parentCell;
 
         public event EventHandler<SnakeSegmentEventArgs> itemConsumed;
-        public event EventHandler<ItemEffectEventArgs> segmentAdded;
 
+        private Vector2Int _direction;
         protected int rotationDirection;
 
         public SnakeCell GetParent()
@@ -32,7 +35,7 @@ namespace SnakeGame.Grid
 
         public bool CheckCollision(GridManager gridManager)
         {
-            Vector2Int newPosition = gridPosition + direction;
+            Vector2Int newPosition = gridPosition + Direction;
             GridCell destinationCell = gridManager.GetValue(newPosition.x, newPosition.y);
 
             if (destinationCell != null)
@@ -52,7 +55,7 @@ namespace SnakeGame.Grid
         public void MoveForward(GridManager gridManager)
         {
             Vector2Int oldPosition = gridPosition;
-            Vector2Int newPosition = gridPosition + direction;
+            Vector2Int newPosition = gridPosition + Direction;
 
             gridManager.SetValue(newPosition.x, newPosition.y, this);
             gridManager.SetValue(oldPosition.x, oldPosition.y, null);
@@ -77,7 +80,7 @@ namespace SnakeGame.Grid
             dir = (int)Mathf.Sign(dir);
 
             transform.Rotate(0, 0, 90 * dir);
-            direction = new Vector2Int(Mathf.RoundToInt(transform.up.x), Mathf.RoundToInt(transform.up.y));
+            Direction = new Vector2Int(Mathf.RoundToInt(transform.up.x), Mathf.RoundToInt(transform.up.y));
         }
 
         public override void OnCollision(SnakeCell otherCell)
@@ -85,14 +88,6 @@ namespace SnakeGame.Grid
             otherCell.DestroyCell();
         }
 
-        public virtual void ExecuteSegmentAddedEffect()
-        {
-            OnSegmentAdded(new ItemEffectEventArgs());
-        }
-
-        protected virtual void OnSegmentAdded(ItemEffectEventArgs args)
-        {
-            segmentAdded?.Invoke(this, args);
-        }
+        public virtual void ExecuteSegmentAddedEffect(SnakeController controller) { }
     }
 }

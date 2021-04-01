@@ -87,13 +87,13 @@ namespace SnakeGame
                 previousCell.cellDestroyed -= Cell_cellDestroyed;
             }
 
-            grid.SetValue(x, y, cell);
-
             if (cell != null)
             {
                 cell.gridPosition = new Vector2Int(x, y);
                 cell.cellDestroyed += Cell_cellDestroyed;
             }
+
+            grid.SetValue(x, y, cell);
         }
 
         private void Cell_cellDestroyed(object sender, System.EventArgs e)

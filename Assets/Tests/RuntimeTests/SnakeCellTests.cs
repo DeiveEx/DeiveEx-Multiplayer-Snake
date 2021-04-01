@@ -25,8 +25,7 @@ namespace Tests
             gridManager.GenerateGrid(100, 100, 1, 1, Vector3.zero);
 
             cell = obj.AddComponent<SnakeCell>();
-            cell.direction = Vector2Int.up;
-            cell.transform.up = (Vector2)cell.direction;
+            cell.Direction = Vector2Int.up;
             cell.gridPosition = Vector2Int.zero;
             gridManager.SetValue(cell.gridPosition.x, cell.gridPosition.y, cell);
         }
@@ -53,12 +52,11 @@ namespace Tests
         public IEnumerator Rotate_DirectionIsRightRotatePositive_DirectionNotEqualsLeft(int direction)
         {
             yield return null;
-            cell.direction = Vector2Int.right;
-            cell.transform.up = (Vector2)cell.direction;
+            cell.Direction = Vector2Int.right;
             cell.SetRotationDirection(direction);
             cell.UpdateDirection();
             yield return null;
-            Assert.AreNotEqual(Vector2Int.left, cell.direction);
+            Assert.AreNotEqual(Vector2Int.left, cell.Direction);
         }
 
         [UnityTest]
@@ -70,7 +68,7 @@ namespace Tests
             cell.SetRotationDirection(direction);
             cell.UpdateDirection();
             yield return null;
-            Assert.AreEqual(Vector2Int.left, cell.direction);
+            Assert.AreEqual(Vector2Int.left, cell.Direction);
         }
 
         [UnityTest]
@@ -82,7 +80,7 @@ namespace Tests
             cell.SetRotationDirection(direction);
             cell.UpdateDirection();
             yield return null;
-            Assert.AreEqual(Vector2Int.right, cell.direction);
+            Assert.AreEqual(Vector2Int.right, cell.Direction);
         }
 
         [UnityTest]
